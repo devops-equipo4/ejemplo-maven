@@ -17,7 +17,7 @@ jobs:
       - checkout
       - run:
           name: "Say hello"
-          command: "echo Hello, World Usach 2021!"
+          command: "echo Hello, World Usach DEVOPS 2021!"
       - run:
           name: "Compile Code"
           command: "mvn clean compile -e"
