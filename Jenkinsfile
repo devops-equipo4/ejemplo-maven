@@ -10,42 +10,45 @@ pipeline {
         stage("paso 1"){
             steps {
                 script {
-                sh "echo 'Hello, World Usach 2021!'"
+                sh "echo 'Iniciando Proceso'"
                 }
             }
         }
         stage("paso 2"){
             steps {
                 script {
-                sh "echo 'Compile Code!'"
+                sh "echo 'Compilando Código!'"
+                sh "./mvnw clean compile -e"
                 }
             }
         }
         stage("paso 3"){
             steps {
                 script {
-                sh "echo 'Test Code!'"
+                sh "echo 'Testeando Código!'"
+                sh "./mvnw clean test -e"
                 }
             }
         }
         stage("paso 4"){
             steps {
                 script {
-                sh "echo 'Build .Jar!'"
+                sh "echo 'Empaquetando!'"
+                sh "./mvnw clean package -e"
                 }
             }
         }
     }
     post {
         always {
-            sh "echo 'fase always executed post'"
+            sh "echo 'Fin del proceso'"
         }
         success {
-            sh "echo 'fase success'"
+            sh "echo 'Completado Satisfactoriamente'"
         }
 
         failure {
-            sh "echo 'fase failure'"
+            sh "echo 'Se Cayó?'"
         }
     }
 }
