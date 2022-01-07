@@ -62,7 +62,7 @@ docker run -it --rm -v $(pwd):/code --workdir /code maven mvn clean test -e
 
 ### Jar Code
 docker run -it --rm -v $(pwd):/code --workdir /code maven mvn clean package -e
-
+### test
 ### Run Jar
 docker run -it --rm -p 8081:8081  -v $(pwd):/code --workdir /code maven mvn spring-boot:run
 ```
