@@ -25,7 +25,7 @@ pipeline {
         }
         stage('SonarQube analysis') {
             steps {
-                sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:4.6.2.2472:sonar'
+                sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.7.0.1746:sonar'
             
             }
         }
