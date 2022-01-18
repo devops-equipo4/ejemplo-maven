@@ -26,10 +26,9 @@ pipeline {
         stage('SonarQube analysis') {
             steps {
                 withSonarQubeEnv(credentialsId: 'sonar-server-docker'
-                                , installationName: 'sonarqube'
-                                , projectKey: 'jenkins-sonar') 
+                                , installationName: 'sonarqube') 
                 { // You can override the credential to be used
-                    sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.7.0.1746:sonar'
+                    sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.7.0.1746:sonar -Dsonar.projectKey=ejemplo-maven'
                 }
             }
         }
