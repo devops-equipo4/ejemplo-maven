@@ -23,7 +23,7 @@ pipeline {
                 }
             }
         }
-        stage('SonarQube analysis') {
+        stage('Paso 3: SonarQube') {
             steps {
                 withSonarQubeEnv(credentialsId: 'sonar-server-docker'
                                 , installationName: 'sonarqube') 
