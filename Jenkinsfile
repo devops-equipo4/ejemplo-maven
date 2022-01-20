@@ -23,16 +23,7 @@ pipeline {
                 }
             }
         }
-        stage('Paso 3: SonarQube') {
-            steps {
-                withSonarQubeEnv(credentialsId: 'sonar-server-docker'
-                                , installationName: 'sonarqube') 
-                { // You can override the credential to be used
-                    sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.7.0.1746:sonar -Dsonar.projectKey=ejemplo-maven'
-                }
-            }
-        }
-        stage("Paso 4: Build .Jar"){
+        stage("Paso 3: Build .Jar"){
             steps {
                 script {
                 sh "echo 'Build .Jar!'"
@@ -47,6 +38,16 @@ pipeline {
                 }
             }
         }
+        stage('Paso 4: SonarQube') {
+            steps {
+                withSonarQubeEnv(credentialsId: 'sonar-server-docker'
+                                , installationName: 'sonarqube') 
+                { // You can override the credential to be used
+                    sh 'mvn clean verify org.sonarsource.scanner.maven:sonar-maven-plugin:3.7.0.1746:sonar -Dsonar.projectKey=ejemplo-maven'
+                }
+            }
+        }
+        
     }
     post {
         always {
