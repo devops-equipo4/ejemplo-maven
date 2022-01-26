@@ -48,7 +48,7 @@ pipeline {
                 withSonarQubeEnv('sonarqube') {
                     sh "echo 'Calling sonar Service in another docker container!'"
                     // Run Maven on a Unix agent to execute Sonar.
-                    sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=github-sonar'
+                    sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=taller10'
                    // sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=github-sonar -Dsonar.host.url=https://sonarqube.planeta0.com'
                 }
             }
@@ -58,7 +58,7 @@ pipeline {
             steps {
                 //archiveArtifacts artifacts:'build/*.jar'
                 nexusPublisher nexusInstanceId: 'nexus',
-                nexusRepositoryId: 'devops-usach',
+                nexusRepositoryId: 'devops-usach-nexus',
                     packages: [
                     [$class: 'MavenPackage',
                        mavenAssetList: [
@@ -70,7 +70,7 @@ pipeline {
                             artifactId: 'DevOpsUsach2020',
                             groupId: 'com.devopsusach2020',
                             packaging: 'jar',
-                            version: '0.0.3']
+                            version: '1.0.0']
                     ]
                     ]
             }
@@ -95,7 +95,7 @@ pipeline {
         }
         stage("Paso 9: Curl"){
             steps {
-               sh "curl -X GET 'http://localhost:8085/rest/mscovid/test?msg=testing'"
+               sh "curl -X GET 'http://localhost:8080/rest/mscovid/test?msg=testing'"
             }
         }
     }
