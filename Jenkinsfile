@@ -48,17 +48,60 @@ pipeline {
                 withSonarQubeEnv('sonarqube') {
                     sh "echo 'Calling sonar Service in another docker container!'"
                     // Run Maven on a Unix agent to execute Sonar.
-                    sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=taller10'
-                   // sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=github-sonar -Dsonar.host.url=https://sonarqube.planeta0.com'
+                    sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=github-sonar'
                 }
             }
         }
 
         stage('Paso 5: Subir a Nexus') {
             steps {
+                nexusPublisher nexusInstanceId: 'nexus',
+                nexusRepositoryId: 'devops-usach',
+                    packages: [
+                    [$class: 'MavenPackage',
+                       mavenAssetList: [
+                            [classifier: '',
+                            extension: 'jar',
+                            filePath: 'build/DevOpsUsach2020-0.0.1.jar']
+                            ],
+                        mavenCoordinate: [
+                            artifactId: 'DevOpsUsach2020',
+                            groupId: 'com.devopsusach2020',
+                            packaging: 'jar',
+                            version: '0.0.3']
+                    ]
+                    ]
+            }
+        }
+        stage(" Paso 6: Download: Nexus"){
+            steps {
+                sh "echo 'fase success'"
+                sh ' curl -X GET -u $NEXUS_USER:$NEXUS_PASSWORD "http://nexus:8081/repository/devops-usach/com/devopsusach2020/DevOpsUsach2020/0.0.3/DevOpsUsach2020-0.0.3.jar" -O'
+            }
+        }
+        stage(" Paso 7: Levantar Springboot APP"){
+            steps {
+               sh "echo 'fase ejecutar'"
+               sh 'nohup java -jar DevOpsUsach2020-0.0.3.jar & >/dev/null'
+            }
+        }
+        stage('Paso 8: Dormir(Esperar 60sg, que levante sprint boot) ') {
+            steps {
+                sh "echo 'fase dormir'"
+                sh 'sleep 60'
+
+            }
+        }
+        stage("Paso 9: Curl"){
+            steps {
+               sh "curl -X GET 'http://localhost:8085/rest/mscovid/test?msg=testing'"
+            }
+        }
+        stage('Paso 10: Subir a Nexus 1.0.0') {
+            steps {
                 //archiveArtifacts artifacts:'build/*.jar'
                 nexusPublisher nexusInstanceId: 'nexus',
-                nexusRepositoryId: 'devops-usach-nexus',
+                nexusRepositoryId: 'devops-usach',
                     packages: [
                     [$class: 'MavenPackage',
                        mavenAssetList: [
@@ -75,29 +118,7 @@ pipeline {
                     ]
             }
         }
-        stage(" Paso 6: Download: Nexus"){
-            steps {
-                sh "echo 'fase success'"
-                sh "pwd"
-                sh ' curl -X GET -u $NEXUS_USER:$NEXUS_PASSWORD "http://nexus:8081/repository/devops-usach/com/devopsusach2020/DevOpsUsach2020/0.0.3/DevOpsUsach2020-0.0.3.jar" -O'
-                sh "ls -l"
-            }
-        }
-        stage(" Paso 7: Levantar Springboot APP"){
-            steps {
-               sh 'nohup java -jar DevOpsUsach2020-0.0.3.jar & >/dev/null'
-            }
-        }
-        stage('Paso 8: Dormir(Esperar 60sg, que levante sprint boot) ') {
-            steps {
-                sh 'sleep 60'
-            }
-        }
-        stage("Paso 9: Curl"){
-            steps {
-               sh "curl -X GET 'http://localhost:8080/rest/mscovid/test?msg=testing'"
-            }
-        }
+
     }
     post {
         always {
