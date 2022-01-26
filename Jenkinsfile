@@ -68,7 +68,7 @@ pipeline {
                             artifactId: 'DevOpsUsach2020',
                             groupId: 'com.devopsusach2020',
                             packaging: 'jar',
-                            version: '0.0.3']
+                            version: '0.0.1']
                     ]
                     ]
             }
@@ -82,7 +82,7 @@ pipeline {
         stage(" Paso 7: Levantar Springboot APP"){
             steps {
                sh "echo 'fase ejecutar'"
-               sh 'nohup java -jar DevOpsUsach2020-0.0.3.jar & >/dev/null'
+               sh 'nohup java -jar DevOpsUsach2020-0.0.1.jar & >/dev/null'
             }
         }
         stage('Paso 8: Dormir(Esperar 60sg, que levante sprint boot) ') {
