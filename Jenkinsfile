@@ -85,10 +85,10 @@ pipeline {
                sh 'nohup java -jar DevOpsUsach2020-0.0.1.jar & >/dev/null'
             }
         }
-        stage('Paso 8: Dormir(Esperar 60sg, que levante sprint boot) ') {
+        stage('Paso 8: Dormir(Esperar 55sg, que levante sprint boot) ') {
             steps {
                 sh "echo 'fase dormir'"
-                sh 'sleep 60'
+                sh 'sleep 55'
 
             }
         }
